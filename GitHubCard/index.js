@@ -3,6 +3,71 @@
            https://api.github.com/users/<your name>
 */
 
+const entry = document.querySelector('.cards')
+
+axios.get('https://api.github.com/users/primelos')
+  .then(response =>{
+    console.log('fingers crossed', response.data)
+    
+    const fellow = newFollowers(response.data)
+    entry.appendChild(fellow)
+    })
+ 
+  .catch(error =>{
+    console.log('I am lost, check back later', error)
+  })
+  
+
+  const followersArray = [];
+
+function newFollowers(data) {
+
+  const card = document.createElement('div');
+  const image = document.createElement('img');
+  const cInfo = document.createElement('div')
+  const name = document.createElement('h3');
+  const logName = document.createElement('p');
+  const loc = document.createElement('p');
+  const  prof = document.createElement('p');
+  const address = document.createElement('a');
+  const uFollow = document.createElement('p');
+  const iFollow = document.createElement('p');
+  const bio = document.createElement('p');
+
+  card.classList.add('card')
+  cInfo.classList.add('card-info')
+  name.classList.add('name')
+  logName.classList.add('username')
+
+  card.appendChild(image)
+  card.appendChild(cInfo)
+ 
+
+  cInfo.appendChild(name)
+  cInfo.appendChild(logName)
+  cInfo.appendChild(loc)
+  cInfo.appendChild(prof)
+  cInfo.appendChild(address)
+  cInfo.appendChild(uFollow)
+  cInfo.appendChild(iFollow)
+  cInfo.appendChild(bio)
+
+  image.src = `${data.avatar_url}`;
+  name.textContent = `${data.name}`;
+  logName.textContent = `${data.login}`;
+  loc.textContent = ` ${data.location}`;
+  prof.textContent = `Profile: `;
+  address.href = `${data.html_url}`;
+  address.textContent= `${data.html_url}`
+  uFollow.textContent = `Following: ${data.followers}`;
+  iFollow.textContent = `Followers:${data.following}`
+  bio.textContent = `${data.bio}`
+
+
+return card
+
+};
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -24,7 +89,8 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
