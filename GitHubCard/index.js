@@ -3,54 +3,70 @@
            https://api.github.com/users/<your name>
 */
 
-const entry = document.querySelector('.cards')
+const entry = document.querySelector(".cards");
+axios.get("https://api.github.com/users/primelos")
+  .then(response => {
+    console.log("fingers crossed", response.data);
 
-axios.get('https://api.github.com/users/primelos')
-  .then(response =>{
-    console.log('fingers crossed', response.data)
-    
-    const fellow = newFollowers(response.data)
-    entry.appendChild(fellow)
-    })
- 
-  .catch(error =>{
-    console.log('I am lost, check back later', error)
+    const fellow = newFollowers(response.data);
+    entry.appendChild(fellow);
   })
-  
 
-  const followersArray = [];
+  .catch(error => {
+    console.log("I am lost, check back later", error);
+  });
+//*******************my profile call */
+
+
+const followersArray = ["Aakak", "Wais-A", "raaudain", "umekow", "SoosheBot"];
+
+//////////////
+followersArray.forEach(names => {
+axios.get(`https://api.github.com/users/${names}`)
+  .then(response => {
+        // followersArray = response.data;
+        console.log(response)
+        // const theirCards = newFollowers(data);
+        // entry.appendChild(theirCards);
+      entry.appendChild(newFollowers(response.data))
+      });
+  })
+  .catch(error => {
+    console.log("error again", error);
+  });
+
+
+
 
 function newFollowers(data) {
+  const card = document.createElement("div");
+  const image = document.createElement("img");
+  const cInfo = document.createElement("div");
+  const name = document.createElement("h3");
+  const logName = document.createElement("p");
+  const loc = document.createElement("p");
+  const prof = document.createElement("p");
+  const address = document.createElement("a");
+  const uFollow = document.createElement("p");
+  const iFollow = document.createElement("p");
+  const bio = document.createElement("p");
 
-  const card = document.createElement('div');
-  const image = document.createElement('img');
-  const cInfo = document.createElement('div')
-  const name = document.createElement('h3');
-  const logName = document.createElement('p');
-  const loc = document.createElement('p');
-  const  prof = document.createElement('p');
-  const address = document.createElement('a');
-  const uFollow = document.createElement('p');
-  const iFollow = document.createElement('p');
-  const bio = document.createElement('p');
+  card.classList.add("card");
+  cInfo.classList.add("card-info");
+  name.classList.add("name");
+  logName.classList.add("username");
 
-  card.classList.add('card')
-  cInfo.classList.add('card-info')
-  name.classList.add('name')
-  logName.classList.add('username')
+  card.appendChild(image);
+  card.appendChild(cInfo);
 
-  card.appendChild(image)
-  card.appendChild(cInfo)
- 
-
-  cInfo.appendChild(name)
-  cInfo.appendChild(logName)
-  cInfo.appendChild(loc)
-  cInfo.appendChild(prof)
-  cInfo.appendChild(address)
-  cInfo.appendChild(uFollow)
-  cInfo.appendChild(iFollow)
-  cInfo.appendChild(bio)
+  cInfo.appendChild(name);
+  cInfo.appendChild(logName);
+  cInfo.appendChild(loc);
+  cInfo.appendChild(prof);
+  cInfo.appendChild(address);
+  cInfo.appendChild(uFollow);
+  cInfo.appendChild(iFollow);
+  cInfo.appendChild(bio);
 
   image.src = `${data.avatar_url}`;
   name.textContent = `${data.name}`;
@@ -58,15 +74,13 @@ function newFollowers(data) {
   loc.textContent = ` ${data.location}`;
   prof.textContent = `Profile: `;
   address.href = `${data.html_url}`;
-  address.textContent= `${data.html_url}`
+  address.textContent = `${data.html_url}`;
   uFollow.textContent = `Following: ${data.followers}`;
-  iFollow.textContent = `Followers:${data.following}`
-  bio.textContent = `${data.bio}`
+  iFollow.textContent = `Followers: ${data.following}`;
+  bio.textContent = `${data.bio}`;
 
-
-return card
-
-};
+  return card;
+}
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -88,9 +102,6 @@ return card
           Using that array, iterate over it, requesting data for each user, creating a new card for each
           user, and adding that card to the DOM.
 */
-
-
-
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
